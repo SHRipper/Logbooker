@@ -1,5 +1,6 @@
 package de.logbooker;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.internal.widget.AdapterViewCompat;
@@ -8,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -35,50 +37,38 @@ public class Settings extends ActionBarActivity implements AdapterView.OnItemCli
     // Adapter
     ArrayAdapter<String> SettingsOverviewAdapter;
 
+    // Arrays
     String[] SettingsArray;
+
+    // Objects
     ListView ListViewSettingsOverview;
+    Button ButtonSaveSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        // get the Save Button
+        ButtonSaveSettings = (Button) findViewById(R.id.ButtonSaveSettings);
 
+        // fill SettingsArray with default
         SettingsArray = new String[]{"Windgeschwindigkeitseinheit [m/s]",
                 "Temperatur [°C]", "Streckeneinheit [km]", "Bootsgeschwindigkeit [km/h]",
                 "Eintragsintervall [30 min]", "Sprache [deutsch]"};
 
+        // configure the listview
         ListViewSettingsOverview = (ListView) findViewById(R.id.listViewSettingsOverview);
         SettingsOverviewAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, SettingsArray);
         ListViewSettingsOverview.setAdapter(SettingsOverviewAdapter);
 
+        // set an on item click listener for the listview
         ListViewSettingsOverview.setOnItemClickListener(this);
-
-
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_settings, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    public void onButtonSaveSettings_Click(View view) {
+        Toast.makeText(Settings.this, "Erfolgreich gespeichert!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -179,11 +169,14 @@ public class Settings extends ActionBarActivity implements AdapterView.OnItemCli
                 onPos5_Click += 1;
                 switch (onPos5_Click) {
                     case 1:
-                    // Platzhalter für Spracheinstellungen
+                        // Platzhalter für Spracheinstellungen
                         break;
                 }
 
         }
+        // update the listview data
         SettingsOverviewAdapter.notifyDataSetChanged();
     }
+
+
 }

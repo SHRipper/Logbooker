@@ -13,5 +13,16 @@
         android:layout_height="wrap_content"
         android:id="@+id/listViewSettingsOverview"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/ButtonSaveSettings"
+        android:layout_above="@+id/ButtonSaveSettings" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Einstellungen speichern"
+        android:id="@+id/ButtonSaveSettings"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="onButtonSaveSettings_Click"/>
 </RelativeLayout>

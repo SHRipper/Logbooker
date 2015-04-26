@@ -16,6 +16,7 @@ public class SelectTripActivity extends ActionBarActivity {
     // Intent messages
     public static final String TRIPS_EXIST = "de.logbooker";
     public static final String SELECTED_TRIP = "de.logbooker";
+    public static final String ORIGIN = "de.logbooker.SelectTripActivitiy";
 
     public String[] TripsArray;
 
@@ -67,6 +68,7 @@ public class SelectTripActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) { // go to settings
             Intent SettingsIntent = new Intent(getApplicationContext(), Settings.class);
+            SettingsIntent.putExtra(ORIGIN,"SelectTripActivtiy");
             startActivity(SettingsIntent);
         }
 
