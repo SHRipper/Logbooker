@@ -3,8 +3,8 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_select_trip">SelectTripActivity</string>
-    <string name="title_activity_create_trip">createTripActivity</string>
-    <string name="title_activity_trip_overview">TripOverviewActivity</string>
-    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_select_trip">Törn auswählen</string>
+    <string name="title_activity_create_trip">Törn erstellen</string>
+    <string name="title_activity_trip_overview">Törnübersicht</string>
+    <string name="title_activity_settings">Einstellungen</string>
 </resources>

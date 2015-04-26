@@ -11,14 +11,15 @@ import java.nio.channels.SelectableChannel;
 
 public class createTripActivity extends ActionBarActivity {
 
-    Intent newTripIntent = getIntent();
+    Intent newTripIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_trip);
 
-        Integer existingTrips = newTripIntent.getIntExtra(SelectTripActivity.TRIPS_EXIST,-1);
+        newTripIntent = getIntent();
+        Integer existingTrips = newTripIntent.getIntExtra(SelectTripActivity.TRIPS_EXIST, -1);
 
     }
 

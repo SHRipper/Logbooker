@@ -12,31 +12,33 @@ import android.widget.TextView;
 
 public class TripOverviewActivity extends ActionBarActivity {
 
-    Intent selectedTripIntent = getIntent();
-    String[] DaysArray;
+    Intent selectedTripIntent;
+    public String[] DaysArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip_overview);
 
+        selectedTripIntent = getIntent();
+
         // fill the DaysArray
-        DaysArray= new String[]{};
+        DaysArray = new String[]{};
 
         TextView TripName = (TextView) findViewById(R.id.textViewTripName);
-        ListView ListViewDays = (ListView)findViewById(R.id.listViewDays);
+        ListView ListViewDays = (ListView) findViewById(R.id.listViewDays);
         ArrayAdapter<String> ListViewDaysAdapter;
 
         // set the Title to the selected Trip name
         String selectedTripName = selectedTripIntent.getStringExtra(SelectTripActivity.SELECTED_TRIP);
         TripName.setText(selectedTripName);
 
-        if (DaysArray.length == 0){ // no days saved
+        if (DaysArray.length == 0) { // no days saved
             ListViewDaysAdapter = new ArrayAdapter<String>(this,
                     android.R.layout.simple_list_item_1,
                     new String[]{"Keine Aufzeichnung"});
 
-        }else{
+        } else {
             ListViewDaysAdapter = new ArrayAdapter<String>(this,
                     android.R.layout.simple_list_item_1,
                     DaysArray);
