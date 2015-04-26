@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Logbooker</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_select_trip">SelectTripActivity</string>
+    <string name="title_activity_create_trip">createTripActivity</string>
+    <string name="title_activity_trip_overview">TripOverviewActivity</string>
+    <string name="title_activity_settings">Settings</string>
+</resources>
