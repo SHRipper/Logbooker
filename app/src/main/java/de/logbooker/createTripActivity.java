@@ -1,48 +1,137 @@
 package de.logbooker;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.Toast;
 
-import java.nio.channels.SelectableChannel;
+import static android.view.ViewGroup.*;
+import static android.widget.AdapterView.*;
 
 
-public class createTripActivity extends ActionBarActivity {
+public class createTripActivity extends ActionBarActivity implements OnItemClickListener {
 
     Intent newTripIntent;
+
+    String[] CreateTripArray;
+    ArrayAdapter<String> ListViewCreateTripAdapter;
+
+    Integer i;
+
+    // popup dialog objects and layouts
+    EditText dialogInput;
+    AlertDialog.Builder ad;
+    LinearLayout.LayoutParams lp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_trip);
 
+        // noch nicht belegt!
         newTripIntent = getIntent();
         Integer existingTrips = newTripIntent.getIntExtra(SelectTripActivity.TRIPS_EXIST, -1);
 
+        // fill String Array
+        CreateTripArray = new String[]{"Schiffsname:   ", "Schiffstyp:   ", "Schiffsgröße:   ", "Starthafen:   ",
+                "Törnart:   ", "Crewbesetzung"};
+
+        // fill listview
+        ListView ListViewCreateTrip = (ListView) findViewById(R.id.listViewCreateTrip);
+        ListViewCreateTripAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1,
+                CreateTripArray);
+        ListViewCreateTrip.setAdapter(ListViewCreateTripAdapter);
+
+        // Click listener for an item in the list view
+        ListViewCreateTrip.setOnItemClickListener(this);
+
+        // configure the input dialog
+        ad = new AlertDialog.Builder(this);
+        lp = new LinearLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT,
+                LayoutParams.MATCH_PARENT);
+        ad.setCancelable(true);
+
+        // help variables
+        i = 0;
     }
 
-
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_create_trip, menu);
-        return true;
-    }
+    public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        // create and set new popup dialog
+        dialogInput = new EditText(this);
+        dialogInput.setCursorVisible(false);
+        dialogInput.setLayoutParams(lp);
+        ad.setView(dialogInput);
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        // distinguish the list view item positions clicked
+        switch (position) {
+            case 0: // ship name
+                ad.setMessage("Schiffsname");
+                break;
+            case 1: // ship type
+                ad.setMessage("Schiffstyp");
+                break;
+            case 2: // ship size
+                ad.setMessage("Schiffsgröße in Fuß");
+                break;
+            case 3: // start haven
+                ad.setMessage("Starthafen");
+                break;
+            case 4: // what kind of trip
+                ad.setMessage("Törnart");
+                break;
+            case 5: // crew selection
+                Intent setCrewIntent = new Intent(createTripActivity.this, setCrewActivity.class);
+                startActivity(setCrewIntent);
+                break;
         }
 
-        return super.onOptionsItemSelected(item);
+        if (position != 5) { // everything but crew selection
+            ad.setPositiveButton("OK!", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (position == 2) { // shipsize in foot
+                        CreateTripArray[position] = "Schiffsgröße:   ";
+                        CreateTripArray[position] += dialogInput.getText() + " [ft]";
+                    } else {
+                        CreateTripArray[position] += dialogInput.getText();
+                    }
+                }
+            });
+            // set negative button
+            ad.setNegativeButton("Abbrechen",new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            //show dialog
+            ad.show();
+
+            // noticed if the CreateTripArray has changed
+            ListViewCreateTripAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public void onButtonSaveTrip_Click(View view){
+        Toast.makeText(createTripActivity.this, "gespeichert", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(createTripActivity.this, SelectTripActivity.class);
+        startActivity(intent);
+
     }
 }

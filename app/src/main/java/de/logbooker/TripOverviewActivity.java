@@ -62,8 +62,10 @@ public class TripOverviewActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.edit_selectedTrip) {
+            Intent intent = new Intent(TripOverviewActivity.this,createTripActivity.class);
+            // Extra anfügen damit beim bearbeiten schon erstellte daten drin stehen
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

@@ -3,9 +3,6 @@ package de.logbooker;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.support.v7.internal.widget.AdapterViewCompat;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,7 +11,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
-public class Settings extends ActionBarActivity implements AdapterView.OnItemClickListener {
+public class AppSettings extends ActionBarActivity implements AdapterView.OnItemClickListener {
 
 
     // onClick variables
@@ -68,7 +65,9 @@ public class Settings extends ActionBarActivity implements AdapterView.OnItemCli
     }
 
     public void onButtonSaveSettings_Click(View view) {
-        Toast.makeText(Settings.this, "Erfolgreich gespeichert!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(AppSettings.this, "Erfolgreich gespeichert!", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(AppSettings.this,SelectTripActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -160,7 +159,7 @@ public class Settings extends ActionBarActivity implements AdapterView.OnItemCli
                         break;
                     case 3:
                         SettingsArray[4] = "Eintragsintervall [30 min]";
-                        onPos3_Click = 0;
+                        onPos4_Click = 0;
                         Interval = 30;
                         break;
                 }
