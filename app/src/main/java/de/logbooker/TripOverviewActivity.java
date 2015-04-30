@@ -9,8 +9,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.List;
 
-public class TripOverviewActivity extends ActionBarActivity {
+
+public class tripOverviewActivity extends ActionBarActivity {
 
     Intent selectedTripIntent;
     public String[] DaysArray;
@@ -23,27 +25,26 @@ public class TripOverviewActivity extends ActionBarActivity {
         selectedTripIntent = getIntent();
 
         // fill the DaysArray
-        DaysArray = new String[]{};
+        if(false){
+            // get the saved days here
+        }else{
+            DaysArray = new String[]{"keine Aufzeichnung"};
+        }
+
 
         TextView TripName = (TextView) findViewById(R.id.textViewTripName);
         ListView ListViewDays = (ListView) findViewById(R.id.listViewDays);
-        ArrayAdapter<String> ListViewDaysAdapter;
+
 
         // set the Title to the selected Trip name
-        String selectedTripName = selectedTripIntent.getStringExtra(SelectTripActivity.SELECTED_TRIP);
+        String selectedTripName = selectedTripIntent.getStringExtra(selectTripActivity.SELECTED_TRIP);
         TripName.setText(selectedTripName);
-
-        if (DaysArray.length == 0) { // no days saved
-            ListViewDaysAdapter = new ArrayAdapter<String>(this,
-                    android.R.layout.simple_list_item_1,
-                    new String[]{"Keine Aufzeichnung"});
-
-        } else {
-            ListViewDaysAdapter = new ArrayAdapter<String>(this,
-                    android.R.layout.simple_list_item_1,
+        ArrayAdapter<String> ListViewDaysAdapter = new ArrayAdapter<String>(this,
+                    R.layout.customlist,
+                    R.id.tvCustomList,
                     DaysArray);
-        }
         ListViewDays.setAdapter(ListViewDaysAdapter);
+
     }
 
 
@@ -63,7 +64,7 @@ public class TripOverviewActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.edit_selectedTrip) {
-            Intent intent = new Intent(TripOverviewActivity.this,createTripActivity.class);
+            Intent intent = new Intent(tripOverviewActivity.this,createTripActivity.class);
             // Extra anfügen damit beim bearbeiten schon erstellte daten drin stehen
             startActivity(intent);
         }

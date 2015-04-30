@@ -8,4 +8,5 @@
     <string name="title_activity_trip_overview">Törnübersicht</string>
     <string name="title_activity_settings">Einstellungen</string>
     <string name="title_activity_set_crew">setCrewActivity</string>
+    <string name="title_activity_test">test</string>
 </resources>

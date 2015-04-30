@@ -11,7 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 
-public class SelectTripActivity extends ActionBarActivity {
+public class selectTripActivity extends ActionBarActivity {
 
     // Intent messages
     public static final String TRIPS_EXIST = "de.logbooker";
@@ -30,7 +30,10 @@ public class SelectTripActivity extends ActionBarActivity {
 
         // get the listview and set the adapter
         ListView TripListView = (ListView) findViewById(R.id.TripListView);
-        ArrayAdapter<String> TripListViewAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, TripsArray);
+        ArrayAdapter<String> TripListViewAdapter = new ArrayAdapter<String>(this,
+                R.layout.selecttriplist,
+                R.id.tvSelectTripList,
+                TripsArray);
         TripListView.setAdapter(TripListViewAdapter);
 
         TripListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -41,7 +44,7 @@ public class SelectTripActivity extends ActionBarActivity {
                     newTripIntent.putExtra(TRIPS_EXIST, TripsArray.length);
                     startActivity(newTripIntent);
                 } else { // existing Trip selected
-                    Intent selectTripIntent = new Intent(getApplicationContext(), TripOverviewActivity.class);
+                    Intent selectTripIntent = new Intent(getApplicationContext(), tripOverviewActivity.class);
                     selectTripIntent.putExtra(SELECTED_TRIP, TripsArray[position]);
                     startActivity(selectTripIntent);
                 }

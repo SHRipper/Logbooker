@@ -5,9 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.text.InputType;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -41,7 +38,7 @@ public class createTripActivity extends ActionBarActivity implements OnItemClick
 
         // noch nicht belegt!
         newTripIntent = getIntent();
-        Integer existingTrips = newTripIntent.getIntExtra(SelectTripActivity.TRIPS_EXIST, -1);
+        Integer existingTrips = newTripIntent.getIntExtra(selectTripActivity.TRIPS_EXIST, -1);
 
         // fill String Array
         CreateTripArray = new String[]{"Schiffsname:   ", "Schiffstyp:   ", "Schiffsgröße:   ", "Starthafen:   ",
@@ -50,7 +47,8 @@ public class createTripActivity extends ActionBarActivity implements OnItemClick
         // fill listview
         ListView ListViewCreateTrip = (ListView) findViewById(R.id.listViewCreateTrip);
         ListViewCreateTripAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1,
+                R.layout.createtriplist,
+                R.id.tvCreateTripList,
                 CreateTripArray);
         ListViewCreateTrip.setAdapter(ListViewCreateTripAdapter);
 
@@ -75,6 +73,7 @@ public class createTripActivity extends ActionBarActivity implements OnItemClick
         dialogInput = new EditText(this);
         dialogInput.setCursorVisible(false);
         dialogInput.setLayoutParams(lp);
+        dialogInput.setSingleLine();
         ad.setView(dialogInput);
 
         // distinguish the list view item positions clicked
@@ -130,7 +129,7 @@ public class createTripActivity extends ActionBarActivity implements OnItemClick
 
     public void onButtonSaveTrip_Click(View view){
         Toast.makeText(createTripActivity.this, "gespeichert", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(createTripActivity.this, SelectTripActivity.class);
+        Intent intent = new Intent(createTripActivity.this, selectTripActivity.class);
         startActivity(intent);
 
     }
