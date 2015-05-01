@@ -58,7 +58,8 @@
         android:layout_alignBaseline="@+id/textViewCoSkipper"
         android:layout_alignBottom="@+id/textViewCoSkipper"
         android:layout_toRightOf="@+id/textViewCoSkipper"
-        android:layout_toEndOf="@+id/textViewCoSkipper" />
+        android:layout_toEndOf="@+id/textViewCoSkipper"
+        android:layout_marginLeft="10dp"/>
 
     <TextView
         android:layout_width="wrap_content"
