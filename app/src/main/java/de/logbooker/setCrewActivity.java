@@ -15,6 +15,8 @@ public class setCrewActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_crew);
+
+
     }
 
     public void onButtonSaveCrew_Click(View view){

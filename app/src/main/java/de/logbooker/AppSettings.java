@@ -66,7 +66,7 @@ public class AppSettings extends ActionBarActivity implements AdapterView.OnItem
 
     public void onButtonSaveSettings_Click(View view) {
         Toast.makeText(AppSettings.this, "Erfolgreich gespeichert!", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(AppSettings.this,selectTripActivity.class);
+        Intent intent = new Intent(AppSettings.this,SelectTripActivity.class);
         startActivity(intent);
     }
 

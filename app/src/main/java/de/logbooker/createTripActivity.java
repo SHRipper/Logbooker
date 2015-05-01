@@ -38,7 +38,7 @@ public class createTripActivity extends ActionBarActivity implements OnItemClick
 
         // noch nicht belegt!
         newTripIntent = getIntent();
-        Integer existingTrips = newTripIntent.getIntExtra(selectTripActivity.TRIPS_EXIST, -1);
+        Integer existingTrips = newTripIntent.getIntExtra(SelectTripActivity.TRIPS_EXIST, -1);
 
         // fill String Array
         CreateTripArray = new String[]{"Schiffsname:   ", "Schiffstyp:   ", "Schiffsgröße:   ", "Starthafen:   ",
@@ -129,7 +129,7 @@ public class createTripActivity extends ActionBarActivity implements OnItemClick
 
     public void onButtonSaveTrip_Click(View view){
         Toast.makeText(createTripActivity.this, "gespeichert", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(createTripActivity.this, selectTripActivity.class);
+        Intent intent = new Intent(createTripActivity.this, SelectTripActivity.class);
         startActivity(intent);
 
     }

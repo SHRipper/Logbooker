@@ -9,10 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.List;
 
-
-public class tripOverviewActivity extends ActionBarActivity {
+public class TripOverviewActivity extends ActionBarActivity {
 
     Intent selectedTripIntent;
     public String[] DaysArray;
@@ -37,7 +35,7 @@ public class tripOverviewActivity extends ActionBarActivity {
 
 
         // set the Title to the selected Trip name
-        String selectedTripName = selectedTripIntent.getStringExtra(selectTripActivity.SELECTED_TRIP);
+        String selectedTripName = selectedTripIntent.getStringExtra(SelectTripActivity.SELECTED_TRIP);
         TripName.setText(selectedTripName);
         ArrayAdapter<String> ListViewDaysAdapter = new ArrayAdapter<String>(this,
                     R.layout.customlist,
@@ -64,7 +62,7 @@ public class tripOverviewActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.edit_selectedTrip) {
-            Intent intent = new Intent(tripOverviewActivity.this,createTripActivity.class);
+            Intent intent = new Intent(TripOverviewActivity.this,createTripActivity.class);
             // Extra anfügen damit beim bearbeiten schon erstellte daten drin stehen
             startActivity(intent);
         }
