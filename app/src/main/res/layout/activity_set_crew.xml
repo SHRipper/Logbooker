@@ -6,14 +6,6 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="de.logbooker.setCrewActivity">
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ListViewCrew"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@+id/ButtonSaveCrew" />
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -22,4 +14,57 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:onClick="onButtonSaveCrew_Click"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Skipper:"
+        android:id="@+id/textViewSkipper"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextSkipper"
+        android:hint="Skippername"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/textViewCoSkipper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewSkipper"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_marginTop="30dp"
+        android:text="Co-Skipper:"/>
+
+    <EditText
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextCoSkipper"
+        android:layout_alignBaseline="@+id/textViewCoSkipper"
+        android:layout_toRightOf="@+id/textViewCoSkipper"
+        android:layout_toEndOf="@+id/textViewCoSkipper"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:hint="Co-Skippername"
+        android:layout_marginLeft="10dp"
+        />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listViewCrewMembers"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/ButtonSaveCrew"
+        android:layout_below="@+id/editTextCoSkipper"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="15dp"
+        />
 </RelativeLayout>
