@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,16 +18,20 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.lang.reflect.Member;
+import java.util.ArrayList;
 
-public class setCrewActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
+
+public class setCrewActivity extends ActionBarActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     AlertDialog.Builder ad;
     EditText dialogInput;
     ViewGroup.LayoutParams lp;
     EditText editTextSkipperName;
     EditText editTextCoSkipperName;
+    ArrayAdapter<String> listViewCrewAdapter;
 
-    String[] Members;
+    ArrayList<String> Members;
 
 
     @Override
@@ -34,19 +39,22 @@ public class setCrewActivity extends ActionBarActivity implements AdapterView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_crew);
 
-        Members = new String[]{"Mitglied hinzufügen", "neues Mitglied", "neues Mitglied"};
+        Members = new ArrayList<String>();
+        Members.add(0, "Mitglied hinzufügen");
+
 
         // get the objects
-        ListView listViewCrew = (ListView) findViewById(R.id.ListViewCrew);
+        ListView listViewCrew = (ListView) findViewById(R.id.listViewCrew);
         editTextSkipperName = (EditText) findViewById(R.id.editTextSkipper);
         editTextCoSkipperName = (EditText) findViewById(R.id.editTextCoSkipper);
 
         // set adapter for the listview
-        ArrayAdapter<String> listViewCrewAdapter = new ArrayAdapter<String>(this,
+        listViewCrewAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, Members);
         listViewCrew.setAdapter(listViewCrewAdapter);
 
         listViewCrew.setOnItemClickListener(this);
+        listViewCrew.setOnItemLongClickListener(this);
 
         // set up alertdialog for crew member input
 
@@ -55,13 +63,14 @@ public class setCrewActivity extends ActionBarActivity implements AdapterView.On
         ad = new AlertDialog.Builder(this);
         ad.setCancelable(true);
 
+
     }
 
     public void onButtonSaveCrew_Click(View view) { // save crew settings
 
-        if (editTextSkipperName.length() == 0 && editTextCoSkipperName.length() == 0) {
-                ad.setMessage("Sie müssen zuerst einen Skipper und Co-Skipper angeben!");
-        }else { // skipper and co-skipper field not empty
+        if (editTextSkipperName.getText().length() == 0 && editTextCoSkipperName.getText().length() == 0) {
+            ad.setMessage("Sie müssen mindestens einen Skipper und Co-Skipper angeben!");
+        } else { // skipper and co-skipper field not empty
             Intent intent = new Intent(this, createTripActivity.class);
             intent.putExtra("Members", Members);
             intent.putExtra("Skipper", editTextSkipperName.getText().toString());
@@ -74,16 +83,20 @@ public class setCrewActivity extends ActionBarActivity implements AdapterView.On
     @Override
     public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
         if (position == 0) {
-            Members[Members.length] = "neues Mitglied";
+            Members.add(Members.size(), "neues Mitglied");
+            listViewCrewAdapter.notifyDataSetChanged();
         } else {
             // create the alertdialog on item click
             dialogInput = new EditText(this);
             dialogInput.setSingleLine();
             dialogInput.setLayoutParams(lp);
-            dialogInput.setCursorVisible(false);
+            dialogInput.setTextColor(Color.BLACK);
             ad.setView(dialogInput);
-            ad.setMessage("neues Crewmitglied hinzufügen");
+            ad.setTitle("Crewmitglied hinzufügen");
+            ad.setMessage("Name:");
 
+
+            // add negative and postitive button and show the dialog
             ad.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -94,10 +107,34 @@ public class setCrewActivity extends ActionBarActivity implements AdapterView.On
             ad.setPositiveButton("OK!", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Members[position] = dialogInput.getText().toString();
+                    Members.add(position, dialogInput.getText().toString());
+                    listViewCrewAdapter.notifyDataSetChanged();
                 }
             });
+            ad.show();
 
         }
+
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+
+        ad.setTitle("Wirklich löschen?");
+        ad.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Members.remove(position);
+            }
+        });
+        ad.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        ad.show();
+
+        return false;
     }
 }

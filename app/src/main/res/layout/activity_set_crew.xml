@@ -25,6 +25,7 @@
         android:id="@+id/textViewSkipper"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
+        android:textColor="#000000"
         android:layout_alignParentStart="true" />
 
     <EditText
@@ -32,6 +33,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:hint="Skippername"
+        android:singleLine="true"
         android:layout_alignBaseline="@+id/textViewSkipper"
         android:layout_marginLeft="10dp"
         android:id="@+id/editTextSkipper"
@@ -48,6 +50,7 @@
         android:layout_below="@+id/editTextSkipper"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:textColor="#000000"
         android:layout_marginTop="20dp" />
 
     <EditText
@@ -59,23 +62,25 @@
         android:layout_alignBottom="@+id/textViewCoSkipper"
         android:layout_toRightOf="@+id/textViewCoSkipper"
         android:layout_toEndOf="@+id/textViewCoSkipper"
+        android:singleLine="true"
         android:layout_marginLeft="10dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#000000"
         android:text="Crew Mitglieder:"
         android:id="@+id/textViewCrew"
         android:layout_below="@+id/editTextCoSkipper"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="30dp" />
+        android:layout_marginTop="60dp" />
 
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listView"
+        android:id="@+id/listViewCrew"
         android:layout_below="@+id/textViewCrew"
         android:layout_above="@+id/ButtonSaveCrew"
         android:layout_marginTop="10dp"
