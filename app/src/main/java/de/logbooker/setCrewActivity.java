@@ -31,17 +31,24 @@ public class setCrewActivity extends ActionBarActivity implements AdapterView.On
     EditText editTextCoSkipperName;
     ArrayAdapter<String> listViewCrewAdapter;
 
-    ArrayList<String> Members;
 
+
+    // public variables for cross app action
+    public ArrayList<String> Members;
+    public String SkipperName;
+    public String CoSkipperName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_crew);
 
+
+        // Man muss die Mitglieder-, Skipper und CoSkippernamen noch speichern können
+
+
         Members = new ArrayList<String>();
         Members.add(0, "Mitglied hinzufügen");
-
 
         // get the objects
         ListView listViewCrew = (ListView) findViewById(R.id.listViewCrew);
@@ -69,13 +76,14 @@ public class setCrewActivity extends ActionBarActivity implements AdapterView.On
     public void onButtonSaveCrew_Click(View view) { // save crew settings
 
         if (editTextSkipperName.getText().length() == 0 && editTextCoSkipperName.getText().length() == 0) {
-            ad.setMessage("Sie müssen mindestens einen Skipper und Co-Skipper angeben!");
+            ad.setMessage("Sie müssen mindestens einen Skipper und Co-Skipper angeben!").show();
         } else { // skipper and co-skipper field not empty
+            saveCrewMembers();
+
+            // change activity
             Intent intent = new Intent(this, createTripActivity.class);
-            intent.putExtra("Members", Members);
-            intent.putExtra("Skipper", editTextSkipperName.getText().toString());
-            intent.putExtra("CoSkipper", editTextCoSkipperName.getText().toString());
             startActivity(intent);
+
             Toast.makeText(this, "Crewzusammenstellung gespeichert!", Toast.LENGTH_SHORT).show();
         }
     }
@@ -87,14 +95,7 @@ public class setCrewActivity extends ActionBarActivity implements AdapterView.On
             listViewCrewAdapter.notifyDataSetChanged();
         } else {
             // create the alertdialog on item click
-            dialogInput = new EditText(this);
-            dialogInput.setSingleLine();
-            dialogInput.setLayoutParams(lp);
-            dialogInput.setTextColor(Color.BLACK);
-            ad.setView(dialogInput);
-            ad.setTitle("Crewmitglied hinzufügen");
-            ad.setMessage("Name:");
-
+            createInputAlertDialog();
 
             // add negative and postitive button and show the dialog
             ad.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
@@ -116,6 +117,22 @@ public class setCrewActivity extends ActionBarActivity implements AdapterView.On
         }
 
     }
+    public void createInputAlertDialog(){
+
+        dialogInput = new EditText(this);
+        dialogInput.setSingleLine();
+        dialogInput.setLayoutParams(lp);
+        dialogInput.setTextColor(Color.BLACK);
+        ad.setView(dialogInput);
+        ad.setTitle("Crewmitglied hinzufügen");
+        ad.setMessage("Name:");
+    }
+
+    public void saveCrewMembers(){
+        // crew member list is already public
+        SkipperName = editTextSkipperName.getText().toString();
+        CoSkipperName = editTextCoSkipperName.getText().toString();
+    }
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
@@ -135,6 +152,6 @@ public class setCrewActivity extends ActionBarActivity implements AdapterView.On
         });
         ad.show();
 
-        return false;
+        return true;
     }
 }

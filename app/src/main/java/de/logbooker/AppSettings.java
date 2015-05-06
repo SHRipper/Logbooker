@@ -15,12 +15,12 @@ public class AppSettings extends ActionBarActivity implements AdapterView.OnItem
 
 
     // onClick variables
-    public Integer onPos0_Click = 0;
-    public Integer onPos1_Click = 0;
-    public Integer onPos2_Click = 0;
-    public Integer onPos3_Click = 0;
-    public Integer onPos4_Click = 0;
-    public Integer onPos5_Click = 0;
+    Integer onPos0_Click = 0;
+    Integer onPos1_Click = 0;
+    Integer onPos2_Click = 0;
+    Integer onPos3_Click = 0;
+    Integer onPos4_Click = 0;
+    Integer onPos5_Click = 0;
 
 
     // Settings
@@ -66,7 +66,7 @@ public class AppSettings extends ActionBarActivity implements AdapterView.OnItem
 
     public void onButtonSaveSettings_Click(View view) {
         Toast.makeText(AppSettings.this, "Erfolgreich gespeichert!", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(AppSettings.this,SelectTripActivity.class);
+        Intent intent = new Intent(AppSettings.this, SelectTripActivity.class);
         startActivity(intent);
     }
 
