@@ -1,5 +1,7 @@
 package de.logbooker;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -10,17 +12,22 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 
 public class AppSettings extends ActionBarActivity implements AdapterView.OnItemClickListener {
 
 
     // onClick variables
-    public Integer onPos0_Click = 0;
-    public Integer onPos1_Click = 0;
-    public Integer onPos2_Click = 0;
-    public Integer onPos3_Click = 0;
-    public Integer onPos4_Click = 0;
-    public Integer onPos5_Click = 0;
+    Integer onPos0_Click = 0;
+    Integer onPos1_Click = 0;
+    Integer onPos2_Click = 0;
+    Integer onPos3_Click = 0;
+    Integer onPos4_Click = 0;
+    Integer onPos5_Click = 0;
 
 
     // Settings
@@ -57,7 +64,7 @@ public class AppSettings extends ActionBarActivity implements AdapterView.OnItem
         // configure the listview
         ListViewSettingsOverview = (ListView) findViewById(R.id.listViewSettingsOverview);
         SettingsOverviewAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, SettingsArray);
+                R.layout.createtriplist, SettingsArray);
         ListViewSettingsOverview.setAdapter(SettingsOverviewAdapter);
 
         // set an on item click listener for the listview
@@ -65,9 +72,38 @@ public class AppSettings extends ActionBarActivity implements AdapterView.OnItem
     }
 
     public void onButtonSaveSettings_Click(View view) {
+        saveSettings();
         Toast.makeText(AppSettings.this, "Erfolgreich gespeichert!", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(AppSettings.this,selectTripActivity.class);
+        Intent intent = new Intent(AppSettings.this, SelectTripActivity.class);
         startActivity(intent);
+    }
+
+    public void saveSettings(){
+        File saveFile = new File("");  // Dateipfad fehlt noch
+        FileOutputStream fileOutputStream = null;
+
+        AlertDialog.Builder ad;
+        ad = new AlertDialog.Builder(getApplication());
+        try {
+            fileOutputStream = new FileOutputStream(saveFile);
+        }catch (FileNotFoundException ex){
+            ad.setMessage(ex.toString());
+            ad.show();
+        }
+
+        try{
+            fileOutputStream.write(Windspeed.getBytes());
+            fileOutputStream.write(Temperature.getBytes());
+            fileOutputStream.write(Distance.getBytes());
+            fileOutputStream.write(Boatspeed.getBytes());
+            fileOutputStream.write(Interval);
+            fileOutputStream.write(Language.getBytes());
+            fileOutputStream.flush();
+            fileOutputStream.close();
+        }catch (IOException ex){
+            ad.setMessage(ex.toString());
+            ad.show();
+        }
     }
 
     @Override

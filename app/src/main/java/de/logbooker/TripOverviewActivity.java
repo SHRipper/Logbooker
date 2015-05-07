@@ -1,21 +1,25 @@
 package de.logbooker;
 
+import android.app.ActionBar;
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TabHost;
 import android.widget.TextView;
 
-import java.util.List;
 
-
-public class tripOverviewActivity extends ActionBarActivity {
+public class TripOverviewActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
 
     Intent selectedTripIntent;
     public String[] DaysArray;
+    ActionBar myActionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,28 +27,41 @@ public class tripOverviewActivity extends ActionBarActivity {
         setContentView(R.layout.activity_trip_overview);
 
         selectedTripIntent = getIntent();
+        String selectedTrip = selectedTripIntent.getStringExtra(SelectTripActivity.SELECTED_TRIP);
 
         // fill the DaysArray
-        if(false){
+        if (false) {
             // get the saved days here
-        }else{
-            DaysArray = new String[]{"keine Aufzeichnung"};
+        } else {
+            DaysArray = new String[]{"keine Aufzeichnung", "Beispieltag 1"};
         }
 
+        // implement the TabHost
+        TabHost TabHostTripOverview = (TabHost) findViewById(R.id.tabHostTripOverview);
 
-        TextView TripName = (TextView) findViewById(R.id.textViewTripName);
+        // setup the TabHost with two tabs, one for the DaysOverview and one for the Map
+        TabHostTripOverview.setup();
+        TabHost.TabSpec tabSpec = TabHostTripOverview.newTabSpec("TripOverview");
+        tabSpec.setContent(R.id.DaysOverviewTab);
+        tabSpec.setIndicator(selectedTrip);
+        TabHostTripOverview.addTab(tabSpec);
+
+        tabSpec = TabHostTripOverview.newTabSpec("Map");
+        tabSpec.setContent(R.id.MapTab);
+        tabSpec.setIndicator("Karte");
+        TabHostTripOverview.addTab(tabSpec);
+
+        // implement other stuff
         ListView ListViewDays = (ListView) findViewById(R.id.listViewDays);
 
 
-        // set the Title to the selected Trip name
-        String selectedTripName = selectedTripIntent.getStringExtra(selectTripActivity.SELECTED_TRIP);
-        TripName.setText(selectedTripName);
         ArrayAdapter<String> ListViewDaysAdapter = new ArrayAdapter<String>(this,
-                    R.layout.customlist,
-                    R.id.tvCustomList,
-                    DaysArray);
+                R.layout.customlist,
+                R.id.tvCustomList,
+                DaysArray);
         ListViewDays.setAdapter(ListViewDaysAdapter);
 
+        ListViewDays.setOnItemClickListener(this);
     }
 
 
@@ -64,11 +81,20 @@ public class tripOverviewActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.edit_selectedTrip) {
-            Intent intent = new Intent(tripOverviewActivity.this,createTripActivity.class);
+            Intent intent = new Intent(TripOverviewActivity.this, createTripActivity.class);
             // Extra anfügen damit beim bearbeiten schon erstellte daten drin stehen
             startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        Intent intent = new Intent(TripOverviewActivity.this, daysOverviewActivity.class);
+        intent.putExtra("DATE", "");
+        startActivity(intent);
+
     }
 }

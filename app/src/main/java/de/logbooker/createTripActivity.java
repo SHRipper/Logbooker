@@ -38,10 +38,11 @@ public class createTripActivity extends ActionBarActivity implements OnItemClick
 
         // noch nicht belegt!
         newTripIntent = getIntent();
-        Integer existingTrips = newTripIntent.getIntExtra(selectTripActivity.TRIPS_EXIST, -1);
+        Integer existingTrips = newTripIntent.getIntExtra(SelectTripActivity.TRIPS_EXIST, -1);
 
         // fill String Array
-        CreateTripArray = new String[]{"Schiffsname:   ", "Schiffstyp:   ", "Schiffsgröße:   ", "Starthafen:   ",
+        CreateTripArray = new String[]{"Schiffsname:   ", "Schiffstyp:   ",
+                "Schiffsgröße:   ", "Starthafen:   ",
                 "Törnart:   ", "Crewbesetzung"};
 
         // fill listview
@@ -112,7 +113,7 @@ public class createTripActivity extends ActionBarActivity implements OnItemClick
                 }
             });
             // set negative button
-            ad.setNegativeButton("Abbrechen",new DialogInterface.OnClickListener() {
+            ad.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
@@ -127,9 +128,11 @@ public class createTripActivity extends ActionBarActivity implements OnItemClick
         }
     }
 
-    public void onButtonSaveTrip_Click(View view){
-        Toast.makeText(createTripActivity.this, "gespeichert", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(createTripActivity.this, selectTripActivity.class);
+    public void onButtonSaveTrip_Click(View view) {
+        // save settings here
+
+        Toast.makeText(createTripActivity.this, "Einstellungen gespeichert", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(createTripActivity.this, SelectTripActivity.class);
         startActivity(intent);
 
     }
