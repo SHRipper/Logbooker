@@ -20,10 +20,11 @@
         android:layout_height="match_parent"/>
 
     <TabHost
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:id="@+id/tabHostTripOverview"
-        android:layout_alignParentBottom="true"
+
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true">
 
         <LinearLayout

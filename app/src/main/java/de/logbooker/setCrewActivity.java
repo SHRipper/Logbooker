@@ -18,6 +18,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Member;
 import java.util.ArrayList;
 
@@ -32,7 +36,6 @@ public class setCrewActivity extends ActionBarActivity implements AdapterView.On
     ArrayAdapter<String> listViewCrewAdapter;
 
 
-
     // public variables for cross app action
     public ArrayList<String> Members;
     public String SkipperName;
@@ -43,14 +46,10 @@ public class setCrewActivity extends ActionBarActivity implements AdapterView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_crew);
 
-
-        // Man muss die Mitglieder-, Skipper und CoSkippernamen noch speichern können
-
-
         Members = new ArrayList<String>();
         Members.add(0, "Mitglied hinzufügen");
 
-        // get the objects
+        // implement the objects
         ListView listViewCrew = (ListView) findViewById(R.id.listViewCrew);
         editTextSkipperName = (EditText) findViewById(R.id.editTextSkipper);
         editTextCoSkipperName = (EditText) findViewById(R.id.editTextCoSkipper);
@@ -76,7 +75,15 @@ public class setCrewActivity extends ActionBarActivity implements AdapterView.On
     public void onButtonSaveCrew_Click(View view) { // save crew settings
 
         if (editTextSkipperName.getText().length() == 0 && editTextCoSkipperName.getText().length() == 0) {
-            ad.setMessage("Sie müssen mindestens einen Skipper und Co-Skipper angeben!").show();
+            ad.setMessage("Sie müssen mindestens einen Skipper und Co-Skipper angeben!");
+            ad.setPositiveButton("OK!", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            ad.show();
+
         } else { // skipper and co-skipper field not empty
             saveCrewMembers();
 
@@ -90,6 +97,7 @@ public class setCrewActivity extends ActionBarActivity implements AdapterView.On
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+
         if (position == 0) {
             Members.add(Members.size(), "neues Mitglied");
             listViewCrewAdapter.notifyDataSetChanged();
@@ -117,7 +125,8 @@ public class setCrewActivity extends ActionBarActivity implements AdapterView.On
         }
 
     }
-    public void createInputAlertDialog(){
+
+    public void createInputAlertDialog() {
 
         dialogInput = new EditText(this);
         dialogInput.setSingleLine();
@@ -128,16 +137,38 @@ public class setCrewActivity extends ActionBarActivity implements AdapterView.On
         ad.setMessage("Name:");
     }
 
-    public void saveCrewMembers(){
-        // crew member list is already public
+    public void saveCrewMembers() {
+        // crew member list is already public and updated
         SkipperName = editTextSkipperName.getText().toString();
         CoSkipperName = editTextCoSkipperName.getText().toString();
+        File file = new File(""); //pfad noch aussuchen
+        // prüfen ob die datei existiert
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(file);
+        } catch (FileNotFoundException ex) {
+            ad.setMessage(ex.toString());
+            ad.setTitle("");
+            ad.show();
+        }
+        try {
+            fos.write(SkipperName.getBytes());
+            fos.write("\n".getBytes());
+            fos.write(CoSkipperName.getBytes());
+            fos.flush();
+            fos.close();
+        } catch (IOException ex) {
+            ad.setMessage(ex.toString());
+            ad.setTitle("");
+            ad.show();
+        }
     }
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-
-        ad.setTitle("Wirklich löschen?");
+        ad.setMessage("Really quit?");
+        ad.show();
         ad.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -147,11 +178,9 @@ public class setCrewActivity extends ActionBarActivity implements AdapterView.On
         ad.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
+                dialog.dismiss();
             }
         });
-        ad.show();
-
         return true;
     }
 }

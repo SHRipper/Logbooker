@@ -19,7 +19,7 @@ public class TripOverviewActivity extends ActionBarActivity implements AdapterVi
 
     Intent selectedTripIntent;
     public String[] DaysArray;
-    ActionBar myactionBar;
+    ActionBar myActionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,12 +92,9 @@ public class TripOverviewActivity extends ActionBarActivity implements AdapterVi
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        switch (position) {
-            case 0:
-                // placeholder
-            case 1:
-                Intent intent = new Intent(TripOverviewActivity.this, null);
-                startActivity(intent);
-        }
+        Intent intent = new Intent(TripOverviewActivity.this, daysOverviewActivity.class);
+        intent.putExtra("DATE", "");
+        startActivity(intent);
+
     }
 }

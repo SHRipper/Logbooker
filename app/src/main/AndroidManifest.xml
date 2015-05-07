@@ -29,6 +29,10 @@
             android:name=".setCrewActivity"
             android:label="@string/title_activity_set_crew" >
         </activity>
+        <activity
+            android:name=".daysOverviewActivity"
+            android:label="@string/title_activity_days_overview" >
+        </activity>
     </application>
 
 </manifest>
