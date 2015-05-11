@@ -5,15 +5,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -22,13 +19,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Member;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 
 public class setCrewActivity extends ActionBarActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
-    AlertDialog.Builder ad;
+    AlertDialog.Builder renameDialog;
     EditText dialogInput;
     ViewGroup.LayoutParams lp;
     EditText editTextSkipperName;
@@ -66,8 +63,8 @@ public class setCrewActivity extends ActionBarActivity implements AdapterView.On
 
         lp = new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
-        ad = new AlertDialog.Builder(this);
-        ad.setCancelable(true);
+        renameDialog = new AlertDialog.Builder(this);
+        renameDialog.setCancelable(true);
 
 
     }
@@ -75,6 +72,7 @@ public class setCrewActivity extends ActionBarActivity implements AdapterView.On
     public void onButtonSaveCrew_Click(View view) { // save crew settings
 
         if (editTextSkipperName.getText().length() == 0 && editTextCoSkipperName.getText().length() == 0) {
+            AlertDialog.Builder ad = new AlertDialog.Builder(this);
             ad.setMessage("Sie müssen mindestens einen Skipper und Co-Skipper angeben!");
             ad.setPositiveButton("OK!", new DialogInterface.OnClickListener() {
                 @Override
@@ -106,73 +104,82 @@ public class setCrewActivity extends ActionBarActivity implements AdapterView.On
             createInputAlertDialog();
 
             // add negative and postitive button and show the dialog
-            ad.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+            renameDialog.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
                 }
             });
 
-            ad.setPositiveButton("OK!", new DialogInterface.OnClickListener() {
+            renameDialog.setPositiveButton("OK!", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Members.add(position, dialogInput.getText().toString());
+                    Members.set(position, dialogInput.getText().toString());
                     listViewCrewAdapter.notifyDataSetChanged();
                 }
             });
-            ad.show();
+            renameDialog.show();
 
         }
 
     }
 
     public void createInputAlertDialog() {
-
+        // configure the text input field in the dialog
+        lp = new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
         dialogInput = new EditText(this);
         dialogInput.setSingleLine();
         dialogInput.setLayoutParams(lp);
         dialogInput.setTextColor(Color.BLACK);
-        ad.setView(dialogInput);
-        ad.setTitle("Crewmitglied hinzufügen");
-        ad.setMessage("Name:");
+
+        // set up the dialog
+        renameDialog = new AlertDialog.Builder(this);
+        renameDialog.setCancelable(true);
+        renameDialog.setView(dialogInput);
+        renameDialog.setTitle("Crewmitglied hinzufügen");
+        renameDialog.setMessage("Name:");
     }
 
     public void saveCrewMembers() {
         // crew member list is already public and updated
         SkipperName = editTextSkipperName.getText().toString();
         CoSkipperName = editTextCoSkipperName.getText().toString();
-        File file = new File(""); //pfad noch aussuchen
-        // prüfen ob die datei existiert
+        File crewSaveFile = new File("Crew");
 
-        FileOutputStream fos = null;
         try {
-            fos = new FileOutputStream(file);
-        } catch (FileNotFoundException ex) {
-            ad.setMessage(ex.toString());
-            ad.setTitle("");
-            ad.show();
+            FileOutputStream fos = new FileOutputStream(crewSaveFile);
+            OutputStreamWriter osw = new OutputStreamWriter(fos);
+            // write Skipper and Co-Skipper
+            osw.write(SkipperName);
+            osw.write(CoSkipperName);
+            for (int i = 1; i < Members.size(); i++) {
+                // write all the Members
+                if (Members.get(i).trim().length() != 0 || !Members.get(i).equals("neues Mitglied")) {
+                    osw.write(Members.get(i));
+                }
+            }
+            osw.flush();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        try {
-            fos.write(SkipperName.getBytes());
-            fos.write("\n".getBytes());
-            fos.write(CoSkipperName.getBytes());
-            fos.flush();
-            fos.close();
-        } catch (IOException ex) {
-            ad.setMessage(ex.toString());
-            ad.setTitle("");
-            ad.show();
-        }
+
     }
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-        ad.setMessage("Really quit?");
-        ad.show();
+        AlertDialog.Builder ad = new AlertDialog.Builder(this);
+
+        // confirmation if member should really be deleted
+        ad.setMessage("Wirklich löschen?");
         ad.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                // remove member at the clicked position and update the adapter
                 Members.remove(position);
+                listViewCrewAdapter.notifyDataSetChanged();
             }
         });
         ad.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
@@ -181,6 +188,8 @@ public class setCrewActivity extends ActionBarActivity implements AdapterView.On
                 dialog.dismiss();
             }
         });
+        ad.show();
+
         return true;
     }
 }
