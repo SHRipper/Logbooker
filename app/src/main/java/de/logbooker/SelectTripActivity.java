@@ -71,7 +71,7 @@ public class SelectTripActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) { // go to settings
             Intent SettingsIntent = new Intent(SelectTripActivity.this, AppSettings.class);
-            SettingsIntent.putExtra(ORIGIN,"SelectTripActivtiy");
+            SettingsIntent.putExtra(ORIGIN, "SelectTripActivtiy");
             startActivity(SettingsIntent);
         }
 

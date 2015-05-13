@@ -15,11 +15,15 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.Buffer;
 import java.util.ArrayList;
 
 
@@ -31,7 +35,7 @@ public class setCrewActivity extends ActionBarActivity implements AdapterView.On
     EditText editTextSkipperName;
     EditText editTextCoSkipperName;
     ArrayAdapter<String> listViewCrewAdapter;
-
+    String CrewMemberFile = "CrewMembers";
 
     // public variables for cross app action
     public ArrayList<String> Members;
@@ -42,6 +46,11 @@ public class setCrewActivity extends ActionBarActivity implements AdapterView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_crew);
+
+
+
+        // on startup load saved members
+        loadCrewMembers(CrewMemberFile);
 
         Members = new ArrayList<String>();
         Members.add(0, "Mitglied hinzufügen");
@@ -83,7 +92,7 @@ public class setCrewActivity extends ActionBarActivity implements AdapterView.On
             ad.show();
 
         } else { // skipper and co-skipper field not empty
-            saveCrewMembers();
+            saveCrewMembers(CrewMemberFile);
 
             // change activity
             Intent intent = new Intent(this, createTripActivity.class);
@@ -116,54 +125,11 @@ public class setCrewActivity extends ActionBarActivity implements AdapterView.On
                 public void onClick(DialogInterface dialog, int which) {
                     Members.set(position, dialogInput.getText().toString());
                     listViewCrewAdapter.notifyDataSetChanged();
+
                 }
             });
             renameDialog.show();
 
-        }
-
-    }
-
-    public void createInputAlertDialog() {
-        // configure the text input field in the dialog
-        lp = new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT);
-        dialogInput = new EditText(this);
-        dialogInput.setSingleLine();
-        dialogInput.setLayoutParams(lp);
-        dialogInput.setTextColor(Color.BLACK);
-
-        // set up the dialog
-        renameDialog = new AlertDialog.Builder(this);
-        renameDialog.setCancelable(true);
-        renameDialog.setView(dialogInput);
-        renameDialog.setTitle("Crewmitglied hinzufügen");
-        renameDialog.setMessage("Name:");
-    }
-
-    public void saveCrewMembers() {
-        // crew member list is already public and updated
-        SkipperName = editTextSkipperName.getText().toString();
-        CoSkipperName = editTextCoSkipperName.getText().toString();
-        File crewSaveFile = new File("Crew");
-
-        try {
-            FileOutputStream fos = new FileOutputStream(crewSaveFile);
-            OutputStreamWriter osw = new OutputStreamWriter(fos);
-            // write Skipper and Co-Skipper
-            osw.write(SkipperName);
-            osw.write(CoSkipperName);
-            for (int i = 1; i < Members.size(); i++) {
-                // write all the Members
-                if (Members.get(i).trim().length() != 0 || !Members.get(i).equals("neues Mitglied")) {
-                    osw.write(Members.get(i));
-                }
-            }
-            osw.flush();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
     }
@@ -192,4 +158,78 @@ public class setCrewActivity extends ActionBarActivity implements AdapterView.On
 
         return true;
     }
+
+    public void createInputAlertDialog() {
+        // configure the text input field in the dialog
+        lp = new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
+        dialogInput = new EditText(this);
+        dialogInput.setSingleLine();
+        dialogInput.setLayoutParams(lp);
+        dialogInput.setTextColor(Color.BLACK);
+
+        // set up the dialog
+        renameDialog = new AlertDialog.Builder(this);
+        renameDialog.setCancelable(true);
+        renameDialog.setView(dialogInput);
+        renameDialog.setTitle("Crewmitglied hinzufügen");
+        renameDialog.setMessage("Name:");
+    }
+
+    public void saveCrewMembers(String CrewMemberFile) {
+        // crew member list is already public and updated
+        SkipperName = editTextSkipperName.getText().toString();
+        CoSkipperName = editTextCoSkipperName.getText().toString();
+
+        try {
+            FileOutputStream fileOutputStream = openFileOutput(CrewMemberFile, MODE_PRIVATE);
+
+            fileOutputStream.write((SkipperName + "\n").getBytes());
+            fileOutputStream.write((CoSkipperName + "\n").getBytes());
+            for (int i = 1; i <= Members.size()-1; i++) {
+                fileOutputStream.write((Members.get(i) + "\n").getBytes());
+            }
+            fileOutputStream.write("end".getBytes());
+            fileOutputStream.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public void loadCrewMembers(String CrewMemberFile){
+        int i = 1;
+
+        try {
+            FileInputStream fileInputStream = openFileInput(CrewMemberFile);
+
+            if(fileInputStream != null){
+                InputStreamReader isr = new InputStreamReader(fileInputStream);
+                BufferedReader br = new BufferedReader(isr);
+
+                SkipperName = br.readLine();
+                CoSkipperName = br.readLine();
+
+                while(!br.readLine().equals("end")){
+                    Members.set(i , br.readLine());
+                    i++;
+                }
+
+                isr.close();
+                br.close();
+                fileInputStream.close();
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }

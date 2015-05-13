@@ -4,6 +4,13 @@ android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
 
+        buildTypes{
+            debug{
+                debuggable true
+            }
+        }
+
+
     defaultConfig {
         applicationId "de.logbooker"
         minSdkVersion 15

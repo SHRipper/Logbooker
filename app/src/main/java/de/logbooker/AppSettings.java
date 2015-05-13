@@ -11,10 +11,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 
 
@@ -30,14 +30,14 @@ public class AppSettings extends ActionBarActivity implements AdapterView.OnItem
     Integer onPos5_Click = 0;
 
     // save file
-    String saveFile = "Settings";
+    String SettingsFile = "Settings";
 
     // Settings
     String Windspeed = "m/s";
     String Temperature = "°C";
     String Distance = "km";
     String Boatspeed = "km/h";
-    Integer Interval = 30;
+    String Interval = "30";
     String Language = "deutsch";
 
     // Adapter
@@ -55,10 +55,7 @@ public class AppSettings extends ActionBarActivity implements AdapterView.OnItem
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        saveSettings(saveFile);
-
-        loadSettings(saveFile);
-
+        loadSettings(SettingsFile);
 
         // get the Save Button
         ButtonSaveSettings = (Button) findViewById(R.id.ButtonSaveSettings);
@@ -82,29 +79,63 @@ public class AppSettings extends ActionBarActivity implements AdapterView.OnItem
     }
 
     public void onButtonSaveSettings_Click(View view) {
-        saveSettings(saveFile);
+        saveSettings(SettingsFile);
 
         Toast.makeText(AppSettings.this, "Erfolgreich gespeichert!", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(AppSettings.this, SelectTripActivity.class);
         startActivity(intent);
     }
 
-    public void loadSettings(String saveFile) {
-        try {
-            InputStream inputStream = openFileInput(saveFile);
+    public void loadSettings(String SettingsFile) {
 
-            if (inputStream != null) {
-                InputStreamReader isr = new InputStreamReader(inputStream);
+        try {
+            FileInputStream fileInputStream = openFileInput(SettingsFile);
+
+            if (fileInputStream != null) {
+                InputStreamReader isr = new InputStreamReader(fileInputStream);
                 BufferedReader br = new BufferedReader(isr);
 
-                // read the data out of the file
-                Windspeed = br.readLine();
-                Temperature = br.readLine();
-                Distance = br.readLine();
-                Boatspeed = br.readLine();
+                // read the data out of the save file line by line
+                // if a line doesn't have data in it, the default value will be written
+                // in the variable.
 
-                //Interval = Integer.parseInt(br.readLine());
+                String Line1 = br.readLine();
+                if (Line1 != null) {
+                    Windspeed = Line1;
+                } else {
+                    Windspeed = "m/s"; // default
+                }
 
+                String Line2 = br.readLine();
+                if (Line2 != null) {
+                    Temperature = Line2;
+                } else {
+                    Temperature = "°C"; // default
+                }
+
+                String Line3 = br.readLine();
+                if (Line3 != null) {
+                    Distance = Line3;
+                } else {
+                    Distance = "km"; // default
+                }
+
+                String Line4 = br.readLine();
+                if (Line4 != null) {
+                    Boatspeed = Line4;
+                } else {
+                    Boatspeed = "km/h"; // default
+                }
+
+                String Line5 = br.readLine();
+                if (Line5 != null) {
+                    Interval = Line5;
+                } else {
+                    Interval = "30"; // default
+                }
+                br.close();
+                isr.close();
+                fileInputStream.close();
             }
 
         } catch (FileNotFoundException e) {
@@ -114,17 +145,17 @@ public class AppSettings extends ActionBarActivity implements AdapterView.OnItem
         }
     }
 
-    public void saveSettings(String saveFile) {
+    public void saveSettings(String SettingsFile) {
         try {
 
-            FileOutputStream fos = openFileOutput(saveFile, MODE_PRIVATE);
+            FileOutputStream fos = openFileOutput(SettingsFile, MODE_PRIVATE);
 
             // write data into the file
             fos.write((Windspeed + "\n").getBytes());
             fos.write((Temperature + "\n").getBytes());
             fos.write((Distance + "\n").getBytes());
             fos.write((Boatspeed + "\n").getBytes());
-            //fos.write(Interval);
+            fos.write(Interval.getBytes());
             fos.close();
 
         } catch (FileNotFoundException ex) {
@@ -199,14 +230,14 @@ public class AppSettings extends ActionBarActivity implements AdapterView.OnItem
             case 4: // Interval
 
                 switch (Interval) {
-                    case 30:
-                        Interval = 60;
+                    case "30":
+                        Interval = "60";
                         break;
-                    case 60:
-                        Interval = 120;
+                    case "60":
+                        Interval = "120";
                         break;
-                    case 120:
-                        Interval = 30;
+                    case "120":
+                        Interval = "30";
                         break;
                 }
                 SettingsArray[4] = "Eintragsintervall [" + Interval + "]";
